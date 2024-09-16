@@ -22,8 +22,6 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Project in production
+https://66e6636b2afc151f61a695c0--jobmanage.netlify.app/#/
 
-```sh
-npm run build
-```
