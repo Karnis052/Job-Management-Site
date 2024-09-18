@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Hero title="Test Title" subtitle = "Test Subtitle"/>
+        <Hero title="Hello Enginners " subtitle = "I am Subtitle"/>
         <HomeCards/>
         <JobListings :limit="3" :showButton="true"/>
     </div>

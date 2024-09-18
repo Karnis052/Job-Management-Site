@@ -14,7 +14,7 @@ class Post extends Model
                             'salary', 
                             'location', 
                             'company_name', 
-                            'company_details',
+                            'company_description',
                             'company_contact_phone',
                             'company_contact_email', 
                             'user_id',

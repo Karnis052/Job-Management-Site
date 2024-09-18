@@ -29,28 +29,28 @@
                  <aside>
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h3 class="text-xl font-bold mb-4">Company Info</h3>
-                        <h2 class="text-2xl mb-2"> {{ state.job.company?.name }}</h2>
+                        <h2 class="text-2xl mb-2"> {{ state.job.company_name }}</h2>
                         <p class="my-2"> 
-                           {{ state.job.company?.description }}
+                           {{ state.job.company_description }}
                         </p>
                         <hr class="my-4"/>
                         <h3 class="text-xl">Contact Email:</h3>
 
                         <p class="my-2 bg-green-100 p-2 font-bold">
-                            {{ state.job.company?.contactEmail }}
+                            {{ state.job.company_contact_email }}
                         </p>
 
                         <h3 class="text-xl">Contact Phone:</h3>
-                        <p class="my-2 bg-green-100 p-2 font-bold">{{ state.job.company?.contactPhone }}</p>
+                        <p class="my-2 bg-green-100 p-2 font-bold">{{ state.job.company_contact_phone }}</p>
                     </div>
-                    <div class="bg-white mt-6 rounded-md px-4 py-4"> 
+                    <div v-if="isLoggedIn" class="bg-white mt-6 rounded-md px-4 py-4"> 
                         <h2 class="text-2xl font-bold mb-3">Manage Job</h2>
                         <RouterLink 
                         :to="`/jobs/edit/${state.job.id}`"
                         class="bg-green-500 rounded-full w-full block font-bold focus:outline-none focus:shadow-outline mt-4 px-4 py-2 hover:bg-green-700 text-white text-center"> 
                             Edit Job
                         </RouterLink>
-                        <button @click="deleteJob"
+                        <button   @click="deleteJob"
                             class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
                         >
                             Delete Job
@@ -68,7 +68,7 @@
 <script setup>
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import axios from 'axios';
 import BackButton from '@/components/BackButton.vue';
 import { useToast } from 'vue-toastification';
@@ -76,6 +76,7 @@ import { useToast } from 'vue-toastification';
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
+const isLoggedIn = ref(false);
 
 const jobId = route.params.id;
 const state = reactive({
@@ -87,7 +88,7 @@ const deleteJob = async()=>{
     try{
         const confirm  = window.confirm('Are you sure you want to delete this job?');
         if(confirm){
-            await axios.delete(`/api/jobs/${jobId}`);
+            await axios.delete(`http://127.0.0.1:8000/api/posts/${jobId}`);
             toast.success("Job Deleted Successfully");
             router.push('/jobs')
         }
@@ -99,15 +100,23 @@ const deleteJob = async()=>{
 
 onMounted(async()=>{
     try{
-        const response = await axios.get(`/api/jobs/${jobId}`);
-        state.job = response.data
-        console.log(state.job)
+        const response = await axios.get(`http://127.0.0.1:8000/api/posts/${jobId}`);
+        state.job = response.data.data
+        console.log(state.job.company_description)
+       
     }catch(error){
         console.error('Error fetching job ', error);
     }finally{
         state.isLoading = false;
     }
 });
+
+const checkAuthStatus = ()=>{
+    const token = localStorage.getItem('token');
+    isLoggedIn.value = !!token;
+}
+
+onMounted(checkAuthStatus);
 
 
 </script>

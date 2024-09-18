@@ -1,41 +1,50 @@
 <template>
   <nav class="bg-green-700 border border-green-500 p-4">
-    <div class="container mx-auto flex justify-between items-center">
+    <div class="container mx-auto flex flex-wrap justify-between items-center">
       
-        <div class="flex"> 
+        <div class="flex items-center"> 
             <RouterLink to ="/" class="flex flex-shrink-0 items-center mr-4">
               <img class="h-8 w-auto" :src="logo" alt="Vue Jobs"/>
-              <span class="hidde md:block text-white font-semibold text-2xl ml-2">Vue Jobs</span>
+              <span class="hidden md:block text-white font-semibold text-2xl ml-2">Vue Jobs</span>
             </RouterLink>
         </div>
 
-        <div class="text-white space-x-2"> 
-            <RouterLink to="/"  :class="[ 
-              isActiveLink('/') 
-              ? 'bg-green-900'
-              : 'hover:bg-gray-900',
-              'px-3','py-2','rounded-md']"
-            >
-                Home
-            </RouterLink>
+        <div class="flex items-center sm:mt-0"> 
+            <div class="text-white space-x-2 flex flex-wrap"> 
+                <RouterLink to="/"  :class= "getLinkClass('/')">
+                    Home
+                </RouterLink>
+                <RouterLink to="/jobs"  :class="getLinkClass('/jobs')">
+                    Jobs
+                </RouterLink>
+                <RouterLink v-if="isLoggedIn" to="/jobs/add"  :class="getLinkClass('/jobs/add')" >
+                    Add Job
+                </RouterLink>
 
-            <RouterLink to="/jobs"  :class="[ 
-              isActiveLink('/jobs') 
-              ? 'bg-green-900'
-              : 'hover:bg-gray-900',
-              'px-3','py-2','rounded-md']"
-            >
-                Jobs
-            </RouterLink>
+                <!-- <template v-if="!isLoggedIn">
+                  <RouterLink to="/signup" :class="getLinkClass('/signup')" class="text-sm">
+                      Sign Up
+                  </RouterLink>
+                  <RouterLink to="/login" :class="getLinkClass('/login')" class="text-sm"> 
+                      Log In
+                  </RouterLink>
+              </template>
+              <button v-else @click="logout" class="hover:bg-gray-900 px-3 py-2 rounded-md">
+                  Logout
+              </button> -->
+              <template v-if="!isLoggedIn">
+                <RouterLink to="/signup" :class="getLinkClass('/signup')" class="text-sm">
+                  Sign Up
+                </RouterLink>
+                <RouterLink to="/login" :class="getLinkClass('/login')" class="text-sm"> 
+                  Log In
+                </RouterLink>
+              </template>
+              <button v-else @click="logout" class="hover:bg-gray-900 px-3 py-2 rounded-md text-sm">
+                Logout
+              </button>
+            </div>
 
-            <RouterLink to="/jobs/add"  :class="[ 
-              isActiveLink('/jobs/add') 
-              ? 'bg-green-900'
-              : 'hover:bg-gray-900',
-              'px-3','py-2','rounded-md']"
-            >
-                Add Jobs
-            </RouterLink>
         </div>
     </div>
   </nav>
@@ -43,12 +52,41 @@
 
 <script setup>
 import logo from '@/assets/img/logo.png'
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { onMounted, ref, watch } from 'vue'
 
+
+const isLoggedIn = ref(false);
+const route = useRoute();
+const router = useRouter();
+
+const checkAuthStatus = () =>{
+  const token = localStorage.getItem('token');
+  isLoggedIn.value = !!token;
+}
+
+watch(()=>localStorage.getItem('token'), ()=>{
+  checkAuthStatus();
+} );
+
+onMounted(()=>{
+  checkAuthStatus();
+});
 
 const isActiveLink = (routePath)=>{
-  const route = useRoute();
    return route.path === routePath;
 }
 
+const getLinkClass = (routePath)=>{
+  return [
+    isActiveLink(routePath)? 'bg-green-900':'hover:bg-gray-900',
+    'px-3', 'py-2', 'rounded-md',  'whitespace-nowrap'
+  ];
+}
+
+const logout = ()=>{
+  isLoggedIn.value = false;
+  localStorage.removeItem('token')
+  router.push('/');
+}
 </script>

@@ -27,7 +27,11 @@ Route::get("/posts/", [PostController::class,"index"])->name("posts.index");
 Route::get("/posts/{id}", [PostController::class,"getOne"])->name("posts.getPostById");
 Route::post("/posts/", [PostController::class,"create"])->name("posts.create");
 Route::put("/posts/{id}", [PostController::class,"update"])->name("posts.update");
-Route::delete("/users/{id}", [PostController::class, "delete"])->name("posts.delete");
+Route::delete("/posts/{id}", [PostController::class, "delete"])->name("posts.delete");
+
+Route::post("/login/", [UserController::class,"login"])->name("users.login");
+Route::post("/logout/", [UserController::class,"logout"])->name("users.logout");
+Route::get("/user/", [UserController::class,"user"])->name("users.getUser");
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

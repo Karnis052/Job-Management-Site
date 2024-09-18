@@ -98,7 +98,7 @@
                         >Company Name</label
                     >
                     <input
-                        v-model="form.company.name"
+                        v-model="form.company_name"
                         type="text"
                         id="company"
                         name="company"
@@ -114,7 +114,7 @@
                         >Company Description</label
                     >
                     <textarea
-                        v-model="form.company.description"
+                        v-model="form.company_description"
                         id="company_description"
                         name="company_description"
                         class="border rounded w-full py-2 px-3"
@@ -129,7 +129,7 @@
                         >Contact Email</label
                     >
                     <input
-                        v-model="form.company.contactEmail"
+                        v-model="form.company_contact_email"
                         type="email"
                         id="contact_email"
                         name="contact_email"
@@ -145,7 +145,7 @@
                         >Contact Phone</label
                     >
                     <input
-                        v-model="form.company.contactPhone"
+                        v-model="form.company_contact_phone"
                         type="tel"
                         id="contact_phone"
                         name="contact_phone"
@@ -174,8 +174,8 @@ import { reactive, onMounted} from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRoute, useRouter } from 'vue-router';
 
+
 const route = useRoute();
-// const router = useRouter();
 const jobId = route.params.id;
 
 const form = reactive({
@@ -184,12 +184,11 @@ const form = reactive({
     description: '',
     salary: '',
     location: '',
-    company: {
-        name: '',
-        description: '',
-        contactEmail: '',
-        contactPhone: ''
-    }
+    company_name: '',
+    company_description: '',
+    company_contact_email: '',
+    company_contact_phone: '',
+       
 });
 
 const state = reactive({
@@ -207,38 +206,33 @@ const handleSubmit = async() =>{
         description: form.description,
         salary:  form.salary,
         company: {
-            name: form.company.name,
-            description: form.company.description,
-            contactEmail: form.company.contactEmail,
-            contactPhone: form.company.contactPhone,
+            name: form.company_name,
+            description: form.company_description,
+            contactEmail: form.company_contact_email,
+            contactPhone: form.company_contact_phone,
 
         },
 
     }
    try{
-        const response = await axios.put(`/api/jobs/${jobId}`, updatedJob);
+        const response = await axios.put(`http://127.0.0.1:8000/api/posts/${jobId}`, updatedJob);
         // @todo -add toast
         toast.success('Job updated successfully');
-        router.push(`/jobs/${response.data.id}`);
+        console.log(updatedJob);
+        router.push(`/jobs/${response.data.data.id}`);
    }catch(error){
         console.error('Error while creating job', error);
         toast.error('Job was not updated');
    }
 };
 
+
+
 onMounted(async()=>{
     try{
-        const response = await axios.get(`/api/jobs/${jobId}`);
-        state.job = response.data;
-        form.type = state.job.type;
-        form.title = state.job.title;
-        form.description = state.job.description;
-        form.salary = state.job.salary;
-        form.location = state.job.location;
-        form.company.name = state.job.company.name;
-        form.company.description = state.job.company.description;
-        form.company.contactEmail = state.job.company.contactEmail;
-        form.company.contactPhone = state.job.company.contactPhone;
+        const response = await axios.get(`http://127.0.0.1:8000/api/posts/${jobId}`);
+        Object.assign(form, response.data.data);
+        
     }catch(error){
         console.error("Error fetching the job", error);
     }finally{

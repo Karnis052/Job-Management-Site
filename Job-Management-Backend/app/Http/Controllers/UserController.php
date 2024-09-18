@@ -4,14 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
+use function Laravel\Prompts\error;
 
 class UserController extends Controller
 {
     //
     public function index()
     {
-        $users = User::limit(10)->get();
-        return response()->json(['data' => $users],200);
+        try{
+            $users = User::limit(10)->get();
+            return response()->json([
+                'data' => $users
+            ],200);
+        }catch(\Exception $e){
+            return response()->json(['error' => $e->getMessage()],404);
+        }
+        
     }
     public function getOne($id)
     {
@@ -76,5 +87,52 @@ class UserController extends Controller
         }catch(\Exception $e){
             return response()->json(['error'=> $e->getMessage()],500);  
         }
+    }
+
+    public function login(Request $request)
+    {
+        try{
+            $validatedData = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required'
+            ]);
+            $user = User::where('email', $validatedData['email'])->first();
+            if($user && Hash::check($validatedData['password'], $user->password))
+            {
+                $token = $user->createToken('auth_token')->plainTextToken;
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user' =>$user
+                ], 200);
+            }
+            throw ValidationException::withMessages([
+                'email'=> 'The provided creditials are incorrect',
+            ]);
+
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function logout(Request $request)
+    {
+        try{
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'message'=> 'User deleted successfully',
+                ],200);
+
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
     }
 }

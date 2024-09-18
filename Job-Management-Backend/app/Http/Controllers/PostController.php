@@ -11,9 +11,7 @@ class PostController extends Controller
     {
         try{
             $posts = Post::orderBy("id","desc")->paginate(10);
-            return response()->json([
-                'data' => $posts,
-            ], 201);
+            return response()->json($posts, 201);
         }catch(\Exception $e){
             return response()->json(['error'=>$e->getMessage()],500);
         }
@@ -31,6 +29,7 @@ class PostController extends Controller
     }
     public function create(Request $request)
     {
+       
         try{
             $validatedData = $request->validate([
                 'type'=> 'string|required',
@@ -46,16 +45,16 @@ class PostController extends Controller
             ]);
             $companyDetails = $validatedData['company']??[];
             $postData = array_merge($validatedData,[
-                'company_name' => $companyDetails['name']??null,
-                'company_description' => $companyDetails['descriptin']??null,
+                'company_name' => $companyDetails['name'] ?? null,
+                'company_description' => $companyDetails['description'] ?? null,
                 'company_contact_email' => $companyDetails['contactEmail'] ?? null,
                 'company_contact_phone' => $companyDetails['contactPhone'] ?? null
             ],
             [
                 'user_id' =>1,
-            ]
-        );
-
+            ]);
+        
+            // dd($postData);
             $post = Post::create($postData);
             return response()->json([
                 'data' => $post,
@@ -86,7 +85,7 @@ class PostController extends Controller
             $companyDetails = $validatedData['company']??[];
             $postData = array_merge($validatedData,[
                 'company_name' => $companyDetails['name']??null,
-                'company_description' => $companyDetails['descriptin']??null,
+                'company_description' => $companyDetails['description']??null,
                 'company_contact_email' => $companyDetails['contactEmail'] ?? null,
                 'company_contact_phone' => $companyDetails['contactPhone'] ?? null
             ]);
