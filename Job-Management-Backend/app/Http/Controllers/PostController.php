@@ -37,11 +37,12 @@ class PostController extends Controller
                 'description'=> 'string',
                 'salary' => 'string',
                 'location' => 'string',
+                'user_id' => 'integer|exists:users,id',
                 'company.name' => 'string',
                 'company.description' => 'string',
                 'company.contactEmail' => 'email|required',
                 'company.contactPhone' => 'string',
-                'user_id' => 'integer|exists:users,id'
+                
             ]);
             $companyDetails = $validatedData['company']??[];
             $postData = array_merge($validatedData,[
@@ -49,11 +50,7 @@ class PostController extends Controller
                 'company_description' => $companyDetails['description'] ?? null,
                 'company_contact_email' => $companyDetails['contactEmail'] ?? null,
                 'company_contact_phone' => $companyDetails['contactPhone'] ?? null
-            ],
-            [
-                'user_id' =>1,
             ]);
-        
             // dd($postData);
             $post = Post::create($postData);
             return response()->json([
@@ -89,7 +86,7 @@ class PostController extends Controller
                 'company_contact_email' => $companyDetails['contactEmail'] ?? null,
                 'company_contact_phone' => $companyDetails['contactPhone'] ?? null
             ]);
-            $post->update($postData);
+            // $post->update($postData);
             return response()->json([
                 'data' => $post,
                 'message' => 'post updated successfully'

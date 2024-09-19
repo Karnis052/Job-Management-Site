@@ -169,9 +169,15 @@
 
 <script setup>  
 import axios from 'axios';
-import router from '@/router';
-import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { onMounted, reactive } from 'vue';
 import { useToast } from 'vue-toastification';
+import { useAuthStore } from '@/stores/auth';
+
+
+const toast = useToast();
+const router = useRouter();
+const authStore = useAuthStore();
 
 const form = reactive({
     type:  'Full-Time',
@@ -187,10 +193,22 @@ const form = reactive({
     }
 });
 
-const toast = useToast();
+
+onMounted(()=>{
+    if(!authStore.isLoggedIn){
+        toast.error('You must be logged in to post a job');
+        router.push('/login');
+    }
+});
 
 
 const handleSubmit = async() =>{
+    if (!authStore.isLoggedIn) {
+        toast.error('You must be logged in to post a job');
+        router.push('/login');
+        return;
+    }
+
     const newJob = {
         title: form.title,
         type: form.type,
@@ -204,16 +222,26 @@ const handleSubmit = async() =>{
             contactPhone: form.company.contactPhone,
 
         },
+        user_id: authStore.userId,
 
     }
    try{
-        const response = await axios.post('http://127.0.0.1:8000/api/posts/', newJob);
+        const response = await axios.post('http://127.0.0.1:8000/api/posts/', newJob,{
+            headers:{
+                'Authorization': `Bearer ${authStore.token}`
+            }
+        });
         // @todo -add toast
         toast.success('Job added successfully');
         router.push(`/jobs/${response.data.data.id}`);
    }catch(error){
         console.error('Error while creating job', error);
         toast.error('Job was not added');
+        if(error.response && error.response.status === 401)
+        {
+            authStore.clearAuth();
+            router.push('/login');
+        }
    }
 };
 </script>

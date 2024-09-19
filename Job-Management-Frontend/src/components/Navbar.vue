@@ -17,22 +17,11 @@
                 <RouterLink to="/jobs"  :class="getLinkClass('/jobs')">
                     Jobs
                 </RouterLink>
-                <RouterLink v-if="isLoggedIn" to="/jobs/add"  :class="getLinkClass('/jobs/add')" >
+                <RouterLink v-if="authStore.isLoggedIn" to="/jobs/add"  :class="getLinkClass('/jobs/add')" >
                     Add Job
                 </RouterLink>
 
-                <!-- <template v-if="!isLoggedIn">
-                  <RouterLink to="/signup" :class="getLinkClass('/signup')" class="text-sm">
-                      Sign Up
-                  </RouterLink>
-                  <RouterLink to="/login" :class="getLinkClass('/login')" class="text-sm"> 
-                      Log In
-                  </RouterLink>
-              </template>
-              <button v-else @click="logout" class="hover:bg-gray-900 px-3 py-2 rounded-md">
-                  Logout
-              </button> -->
-              <template v-if="!isLoggedIn">
+              <template v-if="!authStore.isLoggedIn">
                 <RouterLink to="/signup" :class="getLinkClass('/signup')" class="text-sm">
                   Sign Up
                 </RouterLink>
@@ -53,25 +42,12 @@
 <script setup>
 import logo from '@/assets/img/logo.png'
 import { RouterLink, useRoute, useRouter } from 'vue-router';
-import { onMounted, ref, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth';
 
-
-const isLoggedIn = ref(false);
 const route = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
 
-const checkAuthStatus = () =>{
-  const token = localStorage.getItem('token');
-  isLoggedIn.value = !!token;
-}
-
-watch(()=>localStorage.getItem('token'), ()=>{
-  checkAuthStatus();
-} );
-
-onMounted(()=>{
-  checkAuthStatus();
-});
 
 const isActiveLink = (routePath)=>{
    return route.path === routePath;
@@ -85,8 +61,8 @@ const getLinkClass = (routePath)=>{
 }
 
 const logout = ()=>{
-  isLoggedIn.value = false;
-  localStorage.removeItem('token')
+  authStore.clearAuth();
   router.push('/');
 }
+
 </script>

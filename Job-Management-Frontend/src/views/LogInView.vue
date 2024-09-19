@@ -36,13 +36,14 @@
 
 <script setup> 
 import { reactive, ref } from 'vue';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
 
 const toast = useToast();
-
-
+const router = useRouter();
+const authStore = useAuthStore();
 const form = reactive({
     email: '',
     password: '',
@@ -52,11 +53,8 @@ const form = reactive({
 const handleLogin = async()=>{
     try{
         const response = await axios.post('http://127.0.0.1:8000/api/login/', form);
-        // localStorage.setItem({
-        //     'token':response.data.access_token
-        // });
-        localStorage.setItem('token', response.data.access_token);
-        toast.success('Logged in successfully');
+        authStore.setAuth(response.data.access_token, response.data.user.id);
+        // toast.success('Logged in successfully');
         router.push('/');
     }catch(error){
         console.error('An error occurend while Log In', error);

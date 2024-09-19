@@ -43,7 +43,8 @@
                         <h3 class="text-xl">Contact Phone:</h3>
                         <p class="my-2 bg-green-100 p-2 font-bold">{{ state.job.company_contact_phone }}</p>
                     </div>
-                    <div v-if="isLoggedIn" class="bg-white mt-6 rounded-md px-4 py-4"> 
+
+                    <div v-if="canManageJob" class="bg-white mt-6 rounded-md px-4 py-4"> 
                         <h2 class="text-2xl font-bold mb-3">Manage Job</h2>
                         <RouterLink 
                         :to="`/jobs/edit/${state.job.id}`"
@@ -55,33 +56,38 @@
                         >
                             Delete Job
                         </button>
-
                     </div>
+
                 </aside>
             </div>
         </div>
     </section>
-    
 </template>
-
 
 <script setup>
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, onMounted, ref, computed } from 'vue';
 import axios from 'axios';
 import BackButton from '@/components/BackButton.vue';
 import { useToast } from 'vue-toastification';
+import { useAuthStore } from '@/stores/auth';
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
-const isLoggedIn = ref(false);
+const authStore = useAuthStore();
 
 const jobId = route.params.id;
 const state = reactive({
     job: {},
     isLoading: true
+});
+
+const canManageJob = computed(()=>{
+    console.log(authStore.userId, typeof authStore.userId);
+    console.log(state.job.user_id, typeof state.job.user_id);
+    return authStore.isLoggedIn  && Number(authStore.userId) === Number(state.job.user_id);
 });
 
 const deleteJob = async()=>{
@@ -97,12 +103,11 @@ const deleteJob = async()=>{
         toast.error('Job not deleted');
     }
 }
-
 onMounted(async()=>{
     try{
         const response = await axios.get(`http://127.0.0.1:8000/api/posts/${jobId}`);
-        state.job = response.data.data
-        console.log(state.job.company_description)
+        state.job = response.data.data;
+        console.log(state.job);
        
     }catch(error){
         console.error('Error fetching job ', error);
@@ -110,13 +115,4 @@ onMounted(async()=>{
         state.isLoading = false;
     }
 });
-
-const checkAuthStatus = ()=>{
-    const token = localStorage.getItem('token');
-    isLoggedIn.value = !!token;
-}
-
-onMounted(checkAuthStatus);
-
-
 </script>

@@ -13,7 +13,7 @@
                     Browse Jobs
                 </RouterLink>
             </Card>
-            <Card bg="bg-green-100"> 
+            <Card v-if="authStore.isLoggedIn" bg="bg-green-100"> 
                 <h2 class="text-2xl font-bold">  
                     For Employers
                 </h2>
@@ -22,7 +22,7 @@
                     to="/jobs/add"
                     class="inline-block bg-black text-white rounded-md px-3 py-2 hover:bg-gray-700"
                     >
-                    Browse Jobs
+                    Add Jobs
                 </RouterLink>
             </Card>
         </div>
@@ -32,5 +32,8 @@
 <script setup>
 import Card from './Card.vue';
 import { RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 </script>
