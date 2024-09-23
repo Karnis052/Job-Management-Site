@@ -8,7 +8,7 @@
             </div>
 
             <div class="mb-4"> 
-                <label class="px-2 block text-gray-700 font-bold text-sm mb-2" for="name">Name</label>
+                <label class="px-2 block text-gray-700 font-bold text-sm" for="name">Name</label>
                 <input
                 v-model="form.name"
                 id="name"
@@ -18,7 +18,7 @@
                 />
             </div>
             <div class="mb-4"> 
-                <label class="px-2 block text-gray-700 font-bold text-sm mb-2" for="email">Email</label>
+                <label class="px-2 block text-gray-700 font-bold text-sm" for="email">Email</label>
                 <input
                 v-model="form.email"
                 id="email"
@@ -28,7 +28,7 @@
                 />
             </div>
             <div class="mb-4"> 
-                <label class="px-2 block text-gray-700 font-bold text-sm mb-2" for="password">Password</label>
+                <label class="px-2 block text-gray-700 font-bold text-sm" for="password">Password</label>
                 <input
                 v-model="form.password"
                 id="password"
@@ -38,7 +38,7 @@
                 />
             </div>
             <div class="flex items-center justify-center"> 
-                <button class="font-bold bg-green-700 hover:bg-green-900 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"> 
+                <button class="font-bold bg-green-700 hover:bg-green-900 text-white my-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline"> 
                     Sign Up
                 </button>
             </div>

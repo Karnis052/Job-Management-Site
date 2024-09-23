@@ -25,4 +25,9 @@ class Post extends Model
         return $this->belongsTo(User::class, 'id', 'user_id');
     }
     public $timestamps = false;
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

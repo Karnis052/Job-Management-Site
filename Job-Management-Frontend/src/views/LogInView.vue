@@ -4,7 +4,7 @@
             <form @submit.prevent="handleLogin" class="bg-white shadow-md rounder-md px-10 py-10 mb-8">
                 <h2 class="text-center font-bold text-2xl px-2 py-2">Log In</h2>
                 <div class="mb-4 px-2"> 
-                    <label class="px-2 block text-gray-700 font-bold text-sm mb-2" for="email">Email</label>
+                    <label class="px-2 block text-gray-700 font-bold text-sm " for="email">Email</label>
                     <input
                     v-model="form.email"
                     id="email"
@@ -14,7 +14,7 @@
                     />
                 </div>
                 <div class="mb-4 px-2"> 
-                    <label class="px-2 block text-gray-700 font-bold text-sm mb-2" for="password">Password</label>
+                    <label class="px-2 block text-gray-700 font-bold text-sm " for="password">Password</label>
                     <input
                     v-model="form.password"
                     id="password"
@@ -25,7 +25,7 @@
                 </div>
             
                 <div class="flex items-center justify-center"> 
-                    <button class="font-bold bg-green-700 hover:bg-green-900 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"> 
+                    <button class="font-bold bg-green-700 hover:bg-green-900 text-white my-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline"> 
                         Log In
                     </button>
                 </div>

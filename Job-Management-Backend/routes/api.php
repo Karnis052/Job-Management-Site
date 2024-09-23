@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
@@ -32,6 +33,13 @@ Route::delete("/posts/{id}", [PostController::class, "delete"])->name("posts.del
 Route::post("/login/", [UserController::class,"login"])->name("users.login");
 Route::post("/logout/", [UserController::class,"logout"])->name("users.logout");
 Route::get("/user/", [UserController::class,"user"])->name("users.getUser");
+
+Route::get("/applications/", [ApplicationController::class, "index"])->name('applications.index');
+Route::post("/applications/", [ApplicationController::class, "store"])->name('applications.store');
+Route::delete("/application/{id}", [ApplicationController::class, "destroy"])->name('application.destroy');
+Route::get("/application/{id}", [ApplicationController::class, "getOne"])->name('application.getOne');
+
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

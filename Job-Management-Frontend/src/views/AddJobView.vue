@@ -6,7 +6,7 @@
                     <h2 class="text-center font-semibold mb-6 text-3xl">Add Job</h2>
 
                     <div class="flex flex-col mb-6"> 
-                        <label for="type" class="block font-semibold text-gray-700 mb-2">
+                        <label for="type" class="block font-semibold text-gray-700  text-sm">
                             Job Type
                         </label>
                         <select 
@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="flex flex-col mb-6"> 
-                        <label for="name" class="block font-semibold text-gray-700 mb-2">
+                        <label for="name" class="block font-semibold text-gray-700 text-sm">
                             Job Lisiting Name
                         </label>
                         <input
@@ -33,13 +33,13 @@
                             id="name"
                             name="name"
                             class="border w-full rounded px-3 py-2"
-                            placeholder="eg. Beautiful Workplace"
+                            placeholder="e.g. Software Engineer"
                             required
                         />
                     </div>
 
                     <div class="flex flex-col mb-6"> 
-                        <label for="description" class="block text-gray-700 font-bold mb-2"> 
+                        <label for="description" class="block text-gray-700 font-semibold text-sm"> 
                             Description
                         </label>
                         <textarea
@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="flex flex-col mb-6"> 
-                        <label for="salary" class="block font-semibold text-gray-700 mb-2">
+                        <label for="salary" class="block text-gray-700 font-semibold text-sm">
                             Salary
                         </label>
                         <select
@@ -78,7 +78,7 @@
                         </select>
                     </div>
                     <div class="mb-4">
-                    <label for="location" class="block text-gray-700 font-bold mb-2">
+                    <label for="location" class="block text-gray-700 font-semibold text-sm">
                         Location
                     </label>
                     <input
@@ -92,9 +92,9 @@
                     />
                     </div>
 
-                    <h3 class="text-2xl mb-5">Company Info</h3>
+                    <h3 class="text-2xl font-bold mb-4">Company Info</h3>
                     <div class="mb-4">
-                    <label for="company" class="block text-gray-700 font-bold mb-2"
+                    <label for="company" class="block text-gray-700 font-semibold text-sm"
                         >Company Name</label
                     >
                     <input
@@ -110,7 +110,7 @@
                     <label
                        
                         for="company_description"
-                        class="block text-gray-700 font-bold mb-2"
+                        class="block text-gray-700 font-semibold text-sm"
                         >Company Description</label
                     >
                     <textarea
@@ -125,7 +125,7 @@
                     <div class="mb-4">
                     <label
                         for="contact_email"
-                        class="block text-gray-700 font-bold mb-2"
+                        class="block text-gray-700 font-semibold text-sm"
                         >Contact Email</label
                     >
                     <input
@@ -141,7 +141,7 @@
                     <div class="mb-4">
                     <label
                         for="contact_phone"
-                        class="block text-gray-700 font-bold mb-2"
+                        class="block text-gray-700 font-semibold text-sm"
                         >Contact Phone</label
                     >
                     <input
@@ -155,7 +155,7 @@
                     </div>
                     <div>
                     <button 
-                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold my-6 py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                         type="submit"
                     >
                         Add Job
