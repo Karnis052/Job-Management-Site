@@ -139,19 +139,19 @@
                     />
                     </div>
                     <div class="mb-4">
-                    <label
-                        for="contact_phone"
-                        class="block text-gray-700 font-semibold text-sm"
-                        >Contact Phone</label
-                    >
-                    <input
-                        v-model="form.company.contactPhone"
-                        type="tel"
-                        id="contact_phone"
-                        name="contact_phone"
-                        class="border rounded w-full py-2 px-3"
-                        placeholder="Optional phone for applicants"
-                    />
+                        <label
+                            for="contact_phone"
+                            class="block text-gray-700 font-semibold text-sm"
+                            >Contact Phone</label
+                        >
+                        <input
+                            v-model="form.company.contactPhone"
+                            type="tel"
+                            id="contact_phone"
+                            name="contact_phone"
+                            class="border rounded w-full py-2 px-3"
+                            placeholder="Optional phone for applicants"
+                        />
                     </div>
                     <div>
                     <button 

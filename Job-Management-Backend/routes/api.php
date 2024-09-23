@@ -40,7 +40,12 @@ Route::delete("/application/{id}", [ApplicationController::class, "destroy"])->n
 Route::get("/application/{id}", [ApplicationController::class, "getOne"])->name('application.getOne');
 
 
+Route::get("posts/{postId}/applications/", [ApplicationController::class, 'listApplicationsForPost'])->name('posts.applications');
+Route::get("posts/{postId}/download-resumes/", action: [ApplicationController::class, "downloadAllResumes"])->name("posts.download-resumes");
 
+
+
+Route::middleware('auth:api')->get("/user/posts/", [UserController::class, "getUserPosts"])->name("user.getUserPosts");
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -13,12 +13,13 @@
                     Browse Jobs
                 </RouterLink>
             </Card>
-            <Card v-if="authStore.isLoggedIn" bg="bg-green-100"> 
+            <Card bg="bg-green-100"> 
                 <h2 class="text-2xl font-bold">  
                     For Employers
                 </h2>
                 <p class="mt-2 mb-4">List your jobs to find perfect developer for the role</p>
                 <RouterLink 
+                    v-if="authStore.isLoggedIn"
                     to="/jobs/add"
                     class="inline-block bg-black text-white rounded-md px-3 py-2 hover:bg-gray-700"
                     >

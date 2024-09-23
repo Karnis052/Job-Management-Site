@@ -24,6 +24,25 @@
                         <h3 class="text-green-900 font-bold text-lg mb-2"> Salary </h3>
                         <p class="mb-4">{{ state.job.salary }}/ Year</p>
                     </div>
+                    <div class="my-10 flex justify-center"> 
+                        <RouterLink 
+                        v-if="!canManageJob"
+                        :to="`/jobs/${state.job.id}/application`"
+                        class="bg-green-500 rounded-md text-white font-bold items-center px-3 py-3 hover:bg-green-700 focus:shadow-outline focus:outline-none text-center"
+                        > 
+                                Apply Job
+                        </RouterLink>
+
+                        <RouterLink 
+                         v-else
+                        :to="`/jobs/${state.job.id}/applicants`"
+                        class="bg-green-500 rounded-md text-white font-bold items-center px-3 py-3 hover:bg-green-700 focus:shadow-outline focus:outline-none text-center"
+                        > 
+                                View Applications
+                        </RouterLink>
+
+                    </div>
+                    
                 </main>
 
                  <aside>
@@ -47,7 +66,7 @@
                     <div v-if="canManageJob" class="bg-white mt-6 rounded-md px-4 py-4"> 
                         <h2 class="text-2xl font-bold mb-3">Manage Job</h2>
                         <RouterLink 
-                        :to="`/jobs/edit/${state.job.id}`"
+                        :to="`/jobs/${state.job.id}/edit/`"
                         class="bg-green-500 rounded-full w-full block font-bold focus:outline-none focus:shadow-outline mt-4 px-4 py-2 hover:bg-green-700 text-white text-center"> 
                             Edit Job
                         </RouterLink>
@@ -85,8 +104,6 @@ const state = reactive({
 });
 
 const canManageJob = computed(()=>{
-    console.log(authStore.userId, typeof authStore.userId);
-    console.log(state.job.user_id, typeof state.job.user_id);
     return authStore.isLoggedIn  && Number(authStore.userId) === Number(state.job.user_id);
 });
 

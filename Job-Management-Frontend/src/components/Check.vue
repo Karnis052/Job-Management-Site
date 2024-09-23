@@ -1,67 +1,48 @@
-<script setup>
-import { RouterLink, useRoute, useRouter } from 'vue-router';
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import { reactive, onMounted, ref, computed } from 'vue';
-import axios from 'axios';
-import BackButton from '@/components/BackButton.vue';
-import { useToast } from 'vue-toastification';
-import { useAuthStore } from '@/stores/auth';
-
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
-const authStore = useAuthStore();
-
-const jobId = route.params.id;
-const state = reactive({
-    job: {},
-    isLoading: true
-});
-
-const canManageJob = computed(() => {
-    return authStore.isLoggedIn && authStore.user && state.job.user_id === authStore.user.id;
-});
-
-const deleteJob = async () => {
-    try {
-        const confirm = window.confirm('Are you sure you want to delete this job?');
-        if (confirm) {
-            await axios.delete(`http://127.0.0.1:8000/api/posts/${jobId}`);
-            toast.success("Job Deleted Successfully");
-            router.push('/jobs')
-        }
-    } catch (error) {
-        console.error('Error deleting job', error);
-        toast.error('Job not deleted');
-    }
-}
-
-onMounted(async () => {
-    try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/posts/${jobId}`);
-        state.job = response.data.data;
-    } catch (error) {
-        console.error('Error fetching job ', error);
-    } finally {
-        state.isLoading = false;
-    }
-});
-</script>
-
 <template>
-    <div v-if="canManageJob" class="bg-white mt-6 rounded-md px-4 py-4">
-        <h2 class="text-2xl font-bold mb-3">Manage Job</h2>
-        <RouterLink 
-            :to="`/jobs/edit/${state.job.id}`"
-            class="bg-green-500 rounded-full w-full block font-bold focus:outline-none focus:shadow-outline mt-4 px-4 py-2 hover:bg-green-700 text-white text-center"
-        > 
-            Edit Job
-        </RouterLink>
-        <button   
-            @click="deleteJob"
-            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-        >
-            Delete Job
-        </button>
-    </div>
-</template>
+    <section class="applications-view">
+      <h1 class="text-2xl font-bold mb-4">Applications for Post</h1>
+      <div v-if="state.isLoading" class="text-center">
+        <p>Loading applications...</p>
+      </div>
+      <div v-else-if="state.error" class="text-red-500">
+        {{ state.error }}
+      </div>
+      <div v-else-if="state.applications.length === 0" class="text-gray-500">
+        No applications found for this post.
+      </div>
+      <ul v-else class="space-y-4">
+        <li v-for="application in state.applications" :key="application.id" class="border p-4 rounded-lg">
+          <h2 class="font-semibold">{{ application.user.name }}</h2>
+          <p class="text-sm text-gray-600">Applied on: {{ new Date(application.created_at).toLocaleDateString() }}</p>
+          <p class="mt-2">{{ application.cover_letter }}</p>
+        </li>
+      </ul>
+    </section>
+  </template>
+  
+  <script setup>
+  import { reactive, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import axios from 'axios';
+  
+  const route = useRoute();
+  const postId = route.params.postId;
+  
+  const state = reactive({
+    applications: [],
+    isLoading: true,
+    error: null,
+  });
+  
+  onMounted(async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/posts/${postId}/applications`);
+      state.applications = response.data;
+    } catch (error) {
+      console.error('Error fetching applications:', error);
+      state.error = 'Failed to load applications. Please try again later.';
+    } finally {
+      state.isLoading = false;
+    }
+  });
+  </script>

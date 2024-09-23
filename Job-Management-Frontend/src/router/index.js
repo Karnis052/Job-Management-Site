@@ -7,6 +7,9 @@ import AddJobView from '@/views/AddJobView.vue';
 import EditJobView from '@/views/EditJobView.vue';
 import SignUpView from '@/views/SignUpView.vue';
 import LogInView from '@/views/LogInView.vue';
+import ApplicationView from '@/views/ApplicationView.vue';
+import ShowApplicationsView from '@/views/ShowApplicationsView.vue';
+
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -32,7 +35,7 @@ const router = createRouter({
             component: AddJobView
         },
         {
-            path:'/jobs/edit/:id',
+            path:'/jobs/:id/edit',
             name: 'Edit-Job',
             component: EditJobView
         },
@@ -45,6 +48,17 @@ const router = createRouter({
             path:'/login',
             name: 'Log-in',
             component: LogInView
+        },
+        {
+            path:'/jobs/:id/application',
+            name: 'Job-Application',
+            component: ApplicationView
+
+        },
+        {
+            path:'/jobs/:id/applicants',
+            name: 'Job-Applicant',
+            component: ShowApplicationsView
         },
         {
             path: '/:catchAll(.*)', 

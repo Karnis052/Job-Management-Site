@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -135,4 +136,24 @@ class UserController extends Controller
     {
         return response()->json($request->user());
     }
+
+    public function getUserPosts(Request $request)
+    {
+        try {
+            // Ensure the user is authenticated
+            if (!Auth::check()) {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+            $user = Auth::user();
+            $posts = $user->posts()
+                ->orderBy('id', 'desc')
+                ->paginate(10);
+            return response()->json($posts, 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+
 }
