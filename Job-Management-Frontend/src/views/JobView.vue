@@ -124,7 +124,7 @@ onMounted(async()=>{
     try{
         const response = await axios.get(`http://127.0.0.1:8000/api/posts/${jobId}`);
         state.job = response.data.data;
-        console.log(state.job);
+        
        
     }catch(error){
         console.error('Error fetching job ', error);
